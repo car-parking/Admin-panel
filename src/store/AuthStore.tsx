@@ -4,7 +4,7 @@ export interface UserType {
   name: string;
   email: string;
   role: "admin" | "user";
-  token: string;
+  accessToken: string;
 }
 
 interface AuthStore {
@@ -15,9 +15,11 @@ interface AuthStore {
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
-
+   
   login: (user) => {
-    localStorage.setItem("token", user.token);
+   console.log(user);
+   
+    localStorage.setItem("token", user.accessToken);
     set({ user });
   },
 

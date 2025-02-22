@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Input, Button, Form, Card, Typography, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../api/auth";
-import { useAuthStore } from "../store/AuthStore";
+import { loginUser } from "../../api/auth";
+import { useAuthStore } from "../../store/AuthStore";
 
 const { Title } = Typography;
 

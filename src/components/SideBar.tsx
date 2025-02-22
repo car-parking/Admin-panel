@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
       </div>
       <Menu theme="dark" mode="inline">
         <Menu.Item key="1" icon={<DashboardOutlined />}>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/">Dashboard</Link>
         </Menu.Item>
         <Menu.Item key="2" icon={<UserOutlined />}>
           <Link to="/users">Users</Link>

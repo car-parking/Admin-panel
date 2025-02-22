@@ -10,7 +10,7 @@ interface RequestOptions {
 }
 
 export const useAxios = () => {
-  const token = Cookies.get("token");
+  const token = localStorage.getItem("token");
   const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     headers: {

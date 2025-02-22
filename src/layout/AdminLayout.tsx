@@ -19,12 +19,10 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
-  // ✅ Hook-larni return dan oldin chaqiramiz
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const { logout } = useAuthStore();
 
-  // Sidebar ochish/yopish uchun tugma handleri
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
@@ -48,7 +46,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* ✅ Sidebar Dark mode bilan moslashgan */}
       <Sider trigger={null} collapsible collapsed={collapsed} theme={darkMode ? "dark" : "light"}>
         <div
           style={{
@@ -70,7 +67,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
         />
       </Sider>
       <Layout>
-        {/* ✅ Header Styling */}
         <Header
           style={{
             background: darkMode ? "#001529" : "#fff",
@@ -92,7 +88,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
             </span>
           </div>
 
-          {/* ✅ Dark Mode Switch */}
           <Switch
             checked={darkMode}
             onChange={() => setDarkMode(!darkMode)}
@@ -101,18 +96,18 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
           />
         </Header>
 
-        {/* ✅ Content Styling */}
         <Content
-          style={{
-            margin: "16px",
-            padding: "16px",
-            background: darkMode ? "#141414" : "#fff",
-            color: darkMode ? "white" : "black",
-            minHeight: "calc(100vh - 64px)",
-          }}
-        >
-          <Outlet />
-        </Content>
+  style={{
+    margin: "16px",
+    padding: "16px",
+    background: darkMode ? "#0A1F44" : "#F0F5FF", 
+    color: darkMode ? "#D6E4FF" : "#002766", 
+    minHeight: "calc(100vh - 64px)",
+  }}
+>
+  <Outlet />
+</Content>
+
       </Layout>
     </Layout>
   );

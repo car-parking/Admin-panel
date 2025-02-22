@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/AuthStore";
 
 const PrivateRoute: React.FC = () => {
   const { user } = useAuthStore();
-  return !user ? <Outlet /> : <Navigate to="/login" />;
+  return user ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

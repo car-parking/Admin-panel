@@ -6,16 +6,16 @@ interface LoginData {
 }
 
 export const loginUser = async ({ identifier, password }: LoginData) => {
-  // Fake API uchun
-  const response = await axios.post("https://dummyjson.com/auth/login", {
-    username: identifier, // Fake API da "username" deb ataladi
+  const response = await axios.post("http://10.10.1.231:12545/auth/login", {
+    login: identifier, 
     password,
   });
-
+   console.log(response);
+   
   return {
-    name: response.data.firstName + " " + response.data.lastName,
-    email: response.data.email,
-    role: "admin", // Fake API dan kelmaydi, shunchaki qo‘shib qo‘ydik
-    token: response.data.token,
+  
+    role: "admin", 
+    accessToken: response.data.data.accessToken,
+    refreshToken: response.data.data.refreshToken,
   };
 };
