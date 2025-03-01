@@ -9,6 +9,7 @@ import Users from "./Pages/User";
 import Owner from "./Pages/Owner";
 import Admins from "./Pages/Admins";
 import Settings from "./Pages/Setting";
+import ParkingSpots from "./Pages/ParkingSpot";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App: React.FC = () => {
               <Route path="owners" element={<Owner />} />
               <Route path="admins" element={<Admins />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="parking-spots" element={<ParkingSpots />} />
             </Route>
           </Routes>
         </Router>

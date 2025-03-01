@@ -1,4 +1,4 @@
-import axios from "axios";
+import { useAxios } from "../hook/useAxsios";
 
 interface LoginData {
   identifier: string;
@@ -6,16 +6,22 @@ interface LoginData {
 }
 
 export const loginUser = async ({ identifier, password }: LoginData) => {
-  const response = await axios.post("http://10.10.1.231:12545/auth/login", {
-    login: identifier, 
-    password,
+  const axios = useAxios();
+  const response = await axios({
+    url: "/auth/login",
+    method: "POST",
+    body: {
+      login: identifier,
+      password,
+    }
   });
-   console.log(response);
-   
+ localStorage.setItem("token", response.data.accessToken);
+ localStorage.setItem("refreshToken", response.data.refreshToken);
+console.log(response);
+
   return {
-  
-    role: "admin", 
-    accessToken: response.data.data.accessToken,
-    refreshToken: response.data.data.refreshToken,
+    role: "admin",
+    accessToken: response.data.accessToken,
+    refreshToken: response.data.refreshToken,
   };
 };

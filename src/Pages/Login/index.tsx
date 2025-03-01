@@ -16,23 +16,34 @@ const Login: React.FC = () => {
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data: any) => {
+      console.log("Login muvaffaqiyatli:", data);
       login(data);
       message.success("Muvaffaqiyatli kirildi!");
       navigate("/dashboard");
     },
+    
     onError: () => {
       message.error("Login yoki parol noto‘g‘ri!");
     },
   });
 
-  const handleLogin = () => {
-    if (!identifier || !password) {
-      message.warning("Iltimos, email yoki telefon va parol kiriting!");
-      return;
-    }
+const handleLogin = () => {
+  if (!identifier || !password) {
+    message.warning("Iltimos, email yoki telefon va parol kiriting!");
+    return;
+  }
 
-    mutation.mutate({ identifier, password });
-  };
+  console.log("Login boshlanmoqda...", { identifier, password });
+
+  mutation.mutate(
+    { identifier, password },
+    {
+      onError: (error) => {
+        console.error("Mutation xatosi:", error);
+      },
+    }
+  );
+};
 
   return (
     <div

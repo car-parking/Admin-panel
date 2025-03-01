@@ -7,6 +7,7 @@ import {
   LogoutOutlined,
   MenuOutlined,
   UserAddOutlined,
+  CarOutlined,
 } from "@ant-design/icons";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore";
@@ -32,6 +33,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
     { key: "users", icon: <UserOutlined />, label: "Foydalanuvchilar" },
     { key: "owners", icon: <UserOutlined />, label: "Owner" },
     { key: "admins", icon: <UserAddOutlined />, label: "Adminlar" },
+    { 
+      key: "parking-spots",
+      icon: <CarOutlined />, 
+      label: "Parking Joylar" 
+    },
     { key: "settings", icon: <SettingOutlined />, label: "Sozlamalar" },
     {
       key: "logout",

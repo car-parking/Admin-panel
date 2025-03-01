@@ -32,7 +32,12 @@ const Users: React.FC = () => {
     const fetchUsers = () => {
         axios({url:"/users"})
             .then((res) => {
-                const sortedUsers = res.sort((a: User, b: User) => a.full_name.localeCompare(b.full_name));
+                console.log(res);
+                
+                const sortedUsers = res
+  .filter((user: User) => user?.full_name) // `null` yoki `undefined` bo'lganlarni olib tashlash
+  .sort((a: User, b: User) => (a.full_name ?? "").localeCompare(b.full_name ?? ""));
+
                 setUsers(sortedUsers);
                 setFilteredUsers(sortedUsers);
             })
