@@ -160,28 +160,43 @@ const Reservations = () => {
             render: (_: any, record: Reservation) => (
                 <Space>
                     <Button 
-                        type="link" 
+                        type="text" 
                         icon={<EyeOutlined />}
                         onClick={() => {
                             setSelectedReservation(record.id);
                             setIsEditMode(false);
                             setIsModalVisible(true);
                         }}
+                        style={{
+                            border: '1px solid #d9d9d9',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
                     />
                     <Button 
-                        type="link" 
+                        type="text" 
                         icon={<EditOutlined />}
                         onClick={() => {
                             setSelectedReservation(record.id);
                             setIsEditMode(true);
                             setIsModalVisible(true);
                         }}
+                        style={{
+                            border: '1px solid #d9d9d9',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
                     />
                     <Button 
-                        type="link" 
+                        type="text" 
                         danger
                         icon={<DeleteOutlined />}
                         onClick={() => handleDelete(record.id)}
+                        style={{
+                            border: '1px solid #ff4d4f',
+                            boxShadow: '0 2px 4px rgba(255,77,79,0.8)',
+                            borderRadius: '6px'
+                        }}
                     />
                 </Space>
             ),
@@ -241,9 +256,12 @@ const Reservations = () => {
                                 setIsAddMode(true);
                                 setIsModalVisible(true);
                             }}
-                        >
-                            Yangi rezervatsiya
-                        </Button>
+                            style={{
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                borderRadius: '6px'
+                            }}
+                        />
+                         
                     </Space>
                 </div>
             </div>

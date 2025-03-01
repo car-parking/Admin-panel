@@ -6,7 +6,6 @@ import Login from "./Pages/Login";
 import AdminLayout from "./layout/AdminLayout";
 import Dashboard from "./Pages/Dashboard";
 import Users from "./Pages/User";
-import Owner from "./Pages/Owner";
 import Admins from "./Pages/Admins";
 import Settings from "./Pages/Setting";
 import ParkingSpots from "./Pages/ParkingSpot";
@@ -29,20 +28,20 @@ const App: React.FC<AppProps> = ({ darkMode, setDarkMode }) => {
   const darkTheme = {
     algorithm: theme.darkAlgorithm,
     token: {
-      colorPrimary: "#2F54EB",
-      colorBgBase: "#141E30",
-      colorTextBase: "#D6E4FF",
-      colorBorder: "#3A60C9",
+      colorPrimary: "rgba(47, 84, 235, 1)",
+      colorBgBase: "rgba(20, 30, 48, 1)",
+      colorTextBase: "rgba(214, 228, 255, 1)",
+      colorBorder: "rgba(58, 96, 201, 1)",
     },
   };
 
   const lightTheme = {
     algorithm: theme.defaultAlgorithm,
     token: {
-      colorPrimary: "#3366FF",
-      colorBgBase: "#F0F5FF",
-      colorTextBase: "#002766",
-      colorBorder: "#85A5FF",
+      colorPrimary: "rgba(0, 0, 255, 1)",
+      colorBgBase: "rgba(255, 255, 255, 1)",
+      colorTextBase: "rgba(0, 0, 139, 1)",
+      colorBorder: "rgba(173, 216, 230, 0.5)",
     },
   };
 
@@ -56,7 +55,6 @@ const App: React.FC<AppProps> = ({ darkMode, setDarkMode }) => {
             <Route path="/" element={<AdminLayout darkMode={darkMode} setDarkMode={setDarkMode} />}>
               <Route index path="/dashboard" element={<Dashboard />} />
               <Route path="users" element={<Users />} />
-              <Route path="owners" element={<Owner />} />
               <Route path="admins" element={<Admins />} />
               <Route path="settings" element={<Settings />} />
               <Route path="parking-spots" element={<ParkingSpots />} />

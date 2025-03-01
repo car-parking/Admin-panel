@@ -3,3 +3,59 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+    /* Chrome va boshqa Webkit asoslangan brauzerlar uchun autofill uslublari */
+    input:-webkit-autofill,
+    textarea:-webkit-autofill,
+    select:-webkit-autofill {
+    /* Siz bergan background rangini qoʻllash */
+    background-color: rgba(255, 255, 255, 0) !important;
+    /* Brauzerning default inner shadow uslubini bekor qilamiz */
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset !important;
+    /* Matn rangini belgilash */
+    -webkit-text-fill-color: white !important;
+    /* Baʼzi hollarda transition uslubi yordamida tebranishni bartaraf etish */
+    transition: background-color 5000s ease-in-out 0s !important;
+    }
+
+
+    /* Barcha brauzerlar uchun scroll barlarni yashirish */
+
+/* Firefox uchun */
+* {
+    scrollbar-width: none; /* Scrollbarni yashiradi */
+  }
+  
+  /* IE va Edge uchun */
+  * {
+    -ms-overflow-style: none;
+  }
+  
+  /* Chrome, Safari va Opera uchun */
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Chrome, Safari va Opera uchun */
+.custom-input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255,1);
+  }
+  
+  /* Firefox uchun */
+  .custom-input::-moz-placeholder {
+    color: rgba(255, 255, 255,1);
+  }
+  .custom-input:-moz-placeholder {
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  /* Internet Explorer va Edge uchun */
+  .custom-input:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  /* Standart CSS */
+  .custom-input::placeholder {
+    color: rgba(255, 255, 255, 1);
+  }
+  

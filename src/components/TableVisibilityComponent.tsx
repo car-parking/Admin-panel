@@ -35,9 +35,7 @@ const TableVisibilityComponent: React.FC<TableVisibilityComponentProps> = ({ col
                 onClick={showDrawer} 
                 icon={<SettingOutlined />}
                 style={{ height: '32px', display: 'flex', alignItems: 'center' }}
-            >
-                Ustunlarni sozlash
-            </Button>
+           />
             <Drawer
                 title="Ustunlarni boshqarish"
                 placement="right"

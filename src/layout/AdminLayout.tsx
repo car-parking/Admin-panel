@@ -11,7 +11,7 @@ import {
   WalletOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore";
 
 const { Header, Sider, Content } = Layout;
@@ -24,16 +24,18 @@ interface AdminLayoutProps {
 const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout } = useAuthStore();
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
+  const currentPath = location.pathname.split('/')[1] || 'dashboard';
+
   const menuItems = [
     { key: "dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
     { key: "users", icon: <UserOutlined />, label: "Foydalanuvchilar" },
-    { key: "owners", icon: <UserOutlined />, label: "Owner" },
     { key: "admins", icon: <UserAddOutlined />, label: "Adminlar" },
     { 
       key: "parking-spots",
@@ -63,15 +65,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
   ];
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed} theme={darkMode ? "dark" : "light"}>
+    <Layout style={{ maxHeight: "100vh", minHeight: "100vh"}}>
+      <Sider trigger={null} collapsible collapsed={collapsed} theme={darkMode ? "dark" : "light"} style={{
+            background: darkMode ? "rgba(0, 21, 41, 1)" : "rgba(173, 216, 230, 0.9)",
+
+      }}>
         <div
           style={{
             height: 64,
             margin: 16,
-            color: darkMode ? "white" : "black",
+            color: darkMode ? "rgba(214, 228, 255, 1)" : "rgba(0, 39, 102, 1)",
+
             fontSize: 18,
             textAlign: "center",
+            background: darkMode ? "rgba(0, 21, 41, 1)" : "rgba(173, 216, 230, 0.9)",
           }}
         >
           <b>{!collapsed ? "Admin Panel" : "AP"}</b>
@@ -79,15 +86,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
         <Menu
           theme={darkMode ? "dark" : "light"}
           mode="inline"
-          defaultSelectedKeys={["dashboard"]}
+          selectedKeys={[currentPath]}
           items={menuItems}
           onClick={({ key }) => key !== "logout" && navigate(`/${key}`)}
+          style={{ background: darkMode ? "rgba(0, 21, 41, 1)" : "rgba(173, 216, 230, 0.9)" }}
         />
       </Sider>
       <Layout>
         <Header
           style={{
-            background: darkMode ? "#001529" : "#fff",
+            background: darkMode ? "rgba(0, 21, 41, 1)" : "rgba(173, 216, 230, 0.9)",
             padding: "0 20px",
             display: "flex",
             alignItems: "center",
@@ -99,11 +107,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
               type="text"
               icon={<MenuOutlined />}
               onClick={toggleCollapsed}
-              style={{ fontSize: "18px", marginRight: "16px", color: darkMode ? "white" : "black" }}
+              style={{ fontSize: "18px", marginRight: "16px", color: darkMode ? "rgba(255, 255, 255, 1)" : "rgba(0, 0, 0, 1)" }}
             />
-            <span style={{ fontSize: "18px", fontWeight: "bold", color: darkMode ? "white" : "black" }}>
-              Admin Panel
-            </span>
+<h1>LOGO</h1>
           </div>
 
           <Switch
@@ -115,17 +121,18 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
         </Header>
 
         <Content
-  style={{
-    margin: "16px",
-    padding: "16px",
-    background: darkMode ? "#0A1F44" : "#F0F5FF", 
-    color: darkMode ? "#D6E4FF" : "#002766", 
-    minHeight: "calc(100vh - 64px)",
-  }}
->
-  <Outlet />
-</Content>
-
+          style={{
+            margin: "16px",
+            padding: "16px",
+            background: darkMode ? "rgba(10, 31, 68, 1)" : "rgba(173, 216, 230, 0.9)",
+            color: darkMode ? "rgba(214, 228, 255, 1)" : "rgba(0, 39, 102, 1)",
+            minHeight: "calc(100vh - 64px)",
+            maxHeight: "100%",
+            overflow: "auto",
+          }}
+        >
+          <Outlet />
+        </Content>
       </Layout>
     </Layout>
   );

@@ -19,6 +19,19 @@ export const useAxios = () => {
     },
   });
 
+  // Response interceptor qo'shamiz
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      // 401 xatolik tekshiruvi
+      if (error.response?.status === 401) {
+        localStorage.removeItem("token"); // Tokenni o'chiramiz
+        window.location.href = "/login"; // Login sahifasiga yo'naltiramiz
+      }
+      return Promise.reject(error);
+    }
+  );
+
   const response = async ({ url, method = "GET", body, headers, params }: RequestOptions) => {
     try {
       const config: AxiosRequestConfig = {

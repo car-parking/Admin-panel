@@ -3,6 +3,7 @@ import { Table, Typography, Button, Drawer, Input, Space, Popconfirm } from "ant
 import { useAxios } from "../../hook/useAxsios";
 import { AddComponents, EditComponents, VisiblityComponent } from "./components";
 import SpotDetails from './components/SpotDetails';
+import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -118,19 +119,46 @@ const ParkingSpots: React.FC = () => {
             title: "Amallar",
             render: (_: any, record: ParkingSpot) => (
                 <Space>
-                    <Button onClick={() => {
-                        setSelectedSpotId(record.id.toString());
-                        setDetailsVisible(true);
-                    }}>Batafsil</Button>
-                    <Button onClick={() => {
-                        setSelectedSpot(record);
-                        setEditVisible(true);
-                    }}>Tahrirlash</Button>
+                    <Button 
+                        type="text"
+                        icon={<EyeOutlined />}
+                        onClick={() => {
+                            setSelectedSpotId(record.id.toString());
+                            setDetailsVisible(true);
+                        }}
+                        style={{
+                            border: '1px solid #d9d9d9',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
+                    />
+                    <Button 
+                        type="text"
+                        icon={<EditOutlined />}
+                        onClick={() => {
+                            setSelectedSpot(record);
+                            setEditVisible(true);
+                        }}
+                        style={{
+                            border: '1px solid #d9d9d9',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
+                    />
                     <Popconfirm 
                         title="Rostdan ham o'chirmoqchimisiz?" 
                         onConfirm={() => handleDelete(record.id)}
                     >
-                        <Button danger>O'chirish</Button>
+                        <Button 
+                            type="text"
+                            danger
+                            icon={<DeleteOutlined />}
+                            style={{
+                                border: '1px solid #ff4d4f',
+                                boxShadow: '0 2px 4px rgba(255,77,79,0.8)',
+                                borderRadius: '6px'
+                            }}
+                        />
                     </Popconfirm>
                 </Space>
             ),
@@ -143,10 +171,25 @@ const ParkingSpots: React.FC = () => {
             <div style={{ marginBottom: "10px", display: "flex", justifyContent: "space-between" }}>
                 <Search placeholder="Qidirish..." onSearch={handleSearch} style={{ width: 300 }} />
                 <Space>
-                    <Button onClick={() => setVisibilityVisible(true)}>Ustunlarni tanlash</Button>
-                    <Button type="primary" onClick={() => setAddVisible(true)}>
-                        Parking Joy Qo'shish
-                    </Button>
+                    <Button 
+                        type="text"
+                        icon={<SettingOutlined />}
+                        onClick={() => setVisibilityVisible(true)}
+                        style={{
+                            border: '1px solid #d9d9d9',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
+                    />
+                    <Button 
+                        type="primary" 
+                        icon={<PlusOutlined />}
+                        onClick={() => setAddVisible(true)}
+                        style={{
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
+                    />
                 </Space>
             </div>
             <Table 
@@ -157,12 +200,19 @@ const ParkingSpots: React.FC = () => {
                 pagination={{ pageSize: 5 }}
             />
             
-            <VisiblityComponent 
-                selectedColumns={selectedColumns} 
-                setSelectedColumns={setSelectedColumns} 
-                visible={visibilityVisible} 
+            <Drawer 
+                title="Ustunlarni sozlash"
+                open={visibilityVisible}
                 onClose={() => setVisibilityVisible(false)}
-            />
+                width={300}
+            >
+                <VisiblityComponent 
+                    selectedColumns={selectedColumns} 
+                    setSelectedColumns={setSelectedColumns} 
+                    visible={visibilityVisible}
+                    onClose={() => setVisibilityVisible(false)}
+                />
+            </Drawer>
             
             <Drawer 
                 title="Parking Joy Qo'shish" 

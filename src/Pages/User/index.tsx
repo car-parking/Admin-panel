@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, Button, Drawer, Input, Space, Popconfirm } from "antd";
 import { useAxios } from "../../hook/useAxsios";
 import { AddComponents, EditCommponents } from "./components";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import VisibilityComponent from "../../components/VisibilityComponent";
 import TableVisibilityComponent from "../../components/TableVisibilityComponent";
 
@@ -32,6 +32,7 @@ const Users: React.FC = () => {
     const [addVisible, setAddVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [visibilityVisible, setVisibilityVisible] = useState(false);
 
     const getStatusCounts = () => {
         const counts: { [key: string]: number } = {
@@ -132,12 +133,33 @@ const Users: React.FC = () => {
             key: "actions",
             render: (_: any, record: User) => (
                 <Space>
-                    <Button onClick={() => {
-                        setSelectedUser(record);
-                        setEditVisible(true);
-                    }}>Tahrirlash</Button>
-                    <Popconfirm title="Rostdan ham o'chirmoqchimisiz?" onConfirm={() => handleDelete(record.id)}>
-                        <Button danger>O'chirish</Button>
+                    <Button 
+                        type="text"
+                        icon={<EditOutlined />}
+                        onClick={() => {
+                            setSelectedUser(record);
+                            setEditVisible(true);
+                        }}
+                        style={{
+                            border: '1px solid #d9d9d9',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                            borderRadius: '6px'
+                        }}
+                    />
+                    <Popconfirm 
+                        title="Rostdan ham o'chirmoqchimisiz?" 
+                        onConfirm={() => handleDelete(record.id)}
+                    >
+                        <Button 
+                            type="text"
+                            danger
+                            icon={<DeleteOutlined />}
+                            style={{
+                                border: '1px solid #ff4d4f',
+                                boxShadow: '0 2px 4px rgba(255,77,79,0.8)',
+                                borderRadius: '6px'
+                            }}
+                        />
                     </Popconfirm>
                 </Space>
             ),
@@ -185,9 +207,11 @@ const Users: React.FC = () => {
                             type="primary" 
                             icon={<PlusOutlined />}
                             onClick={() => setAddVisible(true)}
-                        >
-                            Yangi foydalanuvchi
-                        </Button>
+                            style={{
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                borderRadius: '6px'
+                            }}
+                        />
                     </Space>
                 </div>
             </div>
