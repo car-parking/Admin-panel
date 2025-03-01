@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { Table, Typography, Button, Drawer, Input, Space, Popconfirm, } from "antd";
 import { useAxios } from "../../hook/useAxsios";
-import { AddComponents, EditCommponents, VisiblityComponent } from "./components";
+import { AddComponents, EditCommponents } from "./components";
+import { PlusOutlined } from '@ant-design/icons';
+import VisibilityComponent from "../../components/VisibilityComponent";
+import TableVisibilityComponent from "../../components/TableVisibilityComponent";
 
 const { Title } = Typography;
 const { Search } = Input;
+
 type User = {
     id: number;
     full_name: string;
@@ -17,32 +21,51 @@ const Users: React.FC = () => {
     const axios = useAxios();
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-    const [selectedColumns, setSelectedColumns] = useState<Record<string, boolean>>({
+    const [loading, setLoading] = useState(false);
+    const [visibleColumns, setVisibleColumns] = useState<{ [key: string]: boolean }>({
         id: true,
         full_name: true,
         email: true,
         phone_number: true,
         role: true,
+        actions: true,
     });
     const [addVisible, setAddVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
-    const [visibilityVisible, setVisibilityVisible] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
+    const getStatusCounts = () => {
+        const counts: { [key: string]: number } = {
+            USER: 0,
+            PARKING_ADMIN: 0,
+            ADMIN: 0
+        };
+
+        users.forEach(user => {
+            if (counts[user.role as keyof typeof counts] !== undefined) {
+                counts[user.role as keyof typeof counts]++;
+            }
+        });
+
+        return counts;
+    };
+
     const fetchUsers = () => {
+        setLoading(true);
         axios({url:"/users"})
             .then((res) => {
-                console.log(res);
-                
                 const sortedUsers = res
-  .filter((user: User) => user?.full_name) // `null` yoki `undefined` bo'lganlarni olib tashlash
-  .sort((a: User, b: User) => (a.full_name ?? "").localeCompare(b.full_name ?? ""));
+                    .filter((user: User) => user?.full_name)
+                    .sort((a: User, b: User) => (a.full_name ?? "").localeCompare(b.full_name ?? ""));
 
                 setUsers(sortedUsers);
                 setFilteredUsers(sortedUsers);
             })
             .catch((err) => {
                 console.error("Error fetching users:", err);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
@@ -67,74 +90,118 @@ const Users: React.FC = () => {
             .catch(err => console.error("Error deleting user:", err));
     };
 
-    const columns = [
-        selectedColumns.id ? {
+    const baseColumns = [
+        {
             title: "ID",
             dataIndex: "id",
             key: "id",
-        } : null,
-        selectedColumns.full_name ? {
+        },
+        {
             title: "Ism Familiya",
             dataIndex: "full_name",
             key: "full_name",
-        } : null,
-        selectedColumns.email ? {
+        },
+        {
             title: "Email",
             dataIndex: "email",
             key: "email",
-        } : null,
-        selectedColumns.phone_number ? {
+        },
+        {
             title: "Telefon",
             dataIndex: "phone_number",
             key: "phone_number",
-        } : null,
-        selectedColumns.role ? {
+        },
+        {
             title: "Roli",
             dataIndex: "role",
             key: "role",
-        } : null,
+            render: (role: string) => {
+                const roleColors = {
+                    USER: 'blue',
+                    PARKING_ADMIN: 'green',
+                    ADMIN: 'red',
+                };
+                return (
+                    <span style={{ color: roleColors[role as keyof typeof roleColors] }}>
+                        {role}
+                    </span>
+                );
+            },
+        },
         {
             title: "Amallar",
+            key: "actions",
             render: (_: any, record: User) => (
                 <Space>
                     <Button onClick={() => {
                         setSelectedUser(record);
                         setEditVisible(true);
                     }}>Tahrirlash</Button>
-                    <Popconfirm title="Rostdan ham o‘chirmoqchimisiz?" onConfirm={() => handleDelete(record.id)}>
-                        <Button danger>O‘chirish</Button>
+                    <Popconfirm title="Rostdan ham o'chirmoqchimisiz?" onConfirm={() => handleDelete(record.id)}>
+                        <Button danger>O'chirish</Button>
                     </Popconfirm>
                 </Space>
             ),
         },
-    ].filter((column): column is Exclude<typeof column, null> => column !== null);
+    ];
+
+    const columns = baseColumns.filter(col => visibleColumns[col.key]);
+
+    const handleColumnVisibilityChange = (key: string, visible: boolean) => {
+        setVisibleColumns(prev => ({
+            ...prev,
+            [key]: visible
+        }));
+    };
+
+    const visibilityColumns = baseColumns.map(col => ({
+        title: col.title,
+        key: col.key,
+        visible: visibleColumns[col.key]
+    }));
     
     return (
-        <div style={{ padding: "20px" }}>
-            <Title level={2}>Foydalanuvchilar Ro‘yxati</Title>
-            <div style={{ marginBottom: "10px", display: "flex", justifyContent: "space-between" }}>
-                <Search placeholder="Qidirish..." onSearch={handleSearch} style={{ width: 300 }} />
-                <Space>
-                    <Button onClick={() => setVisibilityVisible(true)}>Ustunlarni tanlash</Button>
-                    <Button type="primary" onClick={() => setAddVisible(true)}>Foydalanuvchi Qo‘shish</Button>
-                </Space>
+        <div style={{ padding: 24 }}>
+            <VisibilityComponent
+                totalCount={users.length}
+                statusCounts={getStatusCounts()}
+                type="user"
+            />
+
+            <div style={{ marginBottom: 16 }}>
+                <h2>Foydalanuvchilar</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
+                    <Search 
+                        placeholder="Qidirish..." 
+                        onSearch={handleSearch} 
+                        style={{ width: 300 }} 
+                        allowClear
+                    />
+                    <Space size="middle">
+                        <TableVisibilityComponent
+                            columns={visibilityColumns}
+                            onChange={handleColumnVisibilityChange}
+                        />
+                        <Button 
+                            type="primary" 
+                            icon={<PlusOutlined />}
+                            onClick={() => setAddVisible(true)}
+                        >
+                            Yangi foydalanuvchi
+                        </Button>
+                    </Space>
+                </div>
             </div>
+
             <Table 
                 columns={columns} 
                 dataSource={filteredUsers} 
                 rowKey="id" 
-                bordered 
-                pagination={{ pageSize: 5 }}
+                loading={loading}
+                pagination={{ pageSize: 10 }}
             />
             
-            <VisiblityComponent 
-                selectedColumns={selectedColumns} 
-                setSelectedColumns={setSelectedColumns} 
-                visible={visibilityVisible} 
-                onClose={() => setVisibilityVisible(false)}
-            />
-            
-            <Drawer title="Foydalanuvchi Qo‘shish" open={addVisible} onClose={() => setAddVisible(false)}>
+            <Drawer title="Foydalanuvchi Qo'shish" open={addVisible} onClose={() => setAddVisible(false)}>
                 <AddComponents onClose={() => { setAddVisible(false); fetchUsers(); }} />
             </Drawer>
             <Drawer title="Foydalanuvchini Tahrirlash" open={editVisible} onClose={() => setEditVisible(false)}>

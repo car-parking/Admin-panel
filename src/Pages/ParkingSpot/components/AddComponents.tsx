@@ -1,12 +1,49 @@
 import { useAxios } from "../../../hook/useAxsios";
 import { useState } from "react";
-import { Button, Input, Form, message, Select, InputNumber } from "antd";
+import { Button, Input, Form, message, Select, InputNumber, Space } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 const AddComponents: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const axios = useAxios();
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
+    // Manzil bo'yicha koordinatalarni topish
+    const findCoordinates = async () => {
+        try {
+            const address = form.getFieldValue('address');
+            if (!address) {
+                message.warning("Avval manzilni kiriting!");
+                return;
+            }
+
+            // OpenStreetMap Nominatim API dan foydalanish
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1&countrycodes=uz`,
+                {
+                    headers: {
+                        'Accept-Language': 'uz', // Uzbek tilida natijalarni olish
+                        'User-Agent': 'ParkingApp/1.0' // API talabi
+                    }
+                }
+            );
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                const { lat, lon } = data[0];
+                form.setFieldsValue({
+                    latitude: lat,
+                    longitude: lon
+                });
+                message.success("Koordinatalar topildi!");
+            } else {
+                message.error("Koordinatalar topilmadi! Manzilni aniqroq kiriting");
+            }
+        } catch (error) {
+            console.error("Koordinatalarni topishda xatolik:", error);
+            message.error("Koordinatalarni topishda xatolik!");
+        }
+    };
     const onFinish = (values: any) => {
         setLoading(true);
         axios({url: "/parking-spots", body: values})
@@ -38,7 +75,14 @@ const AddComponents: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 name="address" 
                 rules={[{ required: true, message: "Manzil majburiy!" }]}
             >
-                <Input placeholder="Manzilni kiriting" />
+                <Space.Compact style={{ width: '100%' }}>
+                    <Input placeholder="Manzilni kiriting" />
+                    <Button 
+                        icon={<SearchOutlined />} 
+                        onClick={findCoordinates}
+                        title="Koordinatalarni topish"
+                    />
+                </Space.Compact>
             </Form.Item>
 
             <Form.Item label="Koordinatalar">
@@ -48,14 +92,22 @@ const AddComponents: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         rules={[{ required: true, message: "Longitude majburiy!" }]}
                         style={{ display: 'inline-block', width: 'calc(50% - 8px)', marginRight: '16px' }}
                     >
-                        <InputNumber placeholder="Longitude" style={{ width: '100%' }} />
+                        <InputNumber 
+                            placeholder="Longitude" 
+                            style={{ width: '100%' }} 
+                            precision={6}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="latitude"
                         rules={[{ required: true, message: "Latitude majburiy!" }]}
                         style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
                     >
-                        <InputNumber placeholder="Latitude" style={{ width: '100%' }} />
+                        <InputNumber 
+                            placeholder="Latitude" 
+                            style={{ width: '100%' }} 
+                            precision={6}
+                        />
                     </Form.Item>
                 </Input.Group>
             </Form.Item>

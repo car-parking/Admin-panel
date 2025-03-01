@@ -1,6 +1,7 @@
 import { useAxios } from "../../../hook/useAxsios";
 import { useEffect, useState } from "react";
-import { Button, Input, Form, message, Select, InputNumber } from "antd";
+import { Button, Input, Form, message, Select, InputNumber, Space } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 interface EditComponentsProps {
     parkingSpot: any;
@@ -17,6 +18,42 @@ const EditComponents: React.FC<EditComponentsProps> = ({ parkingSpot, onClose })
             form.setFieldsValue(parkingSpot);
         }
     }, [parkingSpot, form]);
+
+    const findCoordinates = async () => {
+        try {
+            const address = form.getFieldValue('address');
+            if (!address) {
+                message.warning("Avval manzilni kiriting!");
+                return;
+            }
+
+            // OpenStreetMap Nominatim API dan foydalanish
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1&countrycodes=uz`,
+                {
+                    headers: {
+                        'Accept-Language': 'uz', // Uzbek tilida natijalarni olish
+                        'User-Agent': 'ParkingApp/1.0' // API talabi
+                    }
+                }
+            );
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                const { lat, lon } = data[0];
+                form.setFieldsValue({
+                    latitude: lat,
+                    longitude: lon
+                });
+                message.success("Koordinatalar topildi!");
+            } else {
+                message.error("Koordinatalar topilmadi! Manzilni aniqroq kiriting");
+            }
+        } catch (error) {
+            console.error("Koordinatalarni topishda xatolik:", error);
+            message.error("Koordinatalarni topishda xatolik!");
+        }
+    };
 
     const onFinish = (values: any) => {
         setLoading(true);
@@ -39,7 +76,6 @@ const EditComponents: React.FC<EditComponentsProps> = ({ parkingSpot, onClose })
 
     return (
         <Form form={form} layout="vertical" onFinish={onFinish}>
-            {/* AddComponents dagi forma elementlarining aynan o'zi */}
             <Form.Item 
                 label="Joylashuv nomi" 
                 name="location_name" 
@@ -53,104 +89,119 @@ const EditComponents: React.FC<EditComponentsProps> = ({ parkingSpot, onClose })
                 name="address" 
                 rules={[{ required: true, message: "Manzil majburiy!" }]}
             >
-                <Input placeholder="Manzilni kiriting" />
+                <Space.Compact style={{ width: '100%' }}>
+                    <Input placeholder="Manzilni kiriting" />
+                    <Button 
+                        icon={<SearchOutlined />} 
+                        onClick={findCoordinates}
+                        title="Koordinatalarni topish"
+                    />
+                </Space.Compact>
             </Form.Item>
 
             <Form.Item label="Koordinatalar">
-                <Input.Group compact>
+                <Space style={{ width: '100%' }}>
                     <Form.Item
                         name="longitude"
                         rules={[{ required: true, message: "Longitude majburiy!" }]}
-                        style={{ display: 'inline-block', width: 'calc(50% - 8px)', marginRight: '16px' }}
+                        style={{ marginBottom: 0, width: '50%' }}
                     >
-                        <InputNumber placeholder="Longitude" style={{ width: '100%' }} />
+                        <InputNumber 
+                            placeholder="Longitude" 
+                            style={{ width: '100%' }} 
+                            precision={6}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="latitude"
                         rules={[{ required: true, message: "Latitude majburiy!" }]}
-                        style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                        style={{ marginBottom: 0, width: '50%' }}
                     >
-                        <InputNumber placeholder="Latitude" style={{ width: '100%' }} />
+                        <InputNumber 
+                            placeholder="Latitude" 
+                            style={{ width: '100%' }} 
+                            precision={6}
+                        />
                     </Form.Item>
-                </Input.Group>
+                </Space>
             </Form.Item>
 
             <Form.Item label="B toifali joylar">
-                <Input.Group compact>
+                <Space style={{ width: '100%' }}>
                     <Form.Item
                         name="b_total_spots"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)', marginRight: '8px' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Umumiy" style={{ width: '100%' }} min={0} />
                     </Form.Item>
                     <Form.Item
                         name="b_available_spots"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)', marginRight: '8px' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Bo'sh" style={{ width: '100%' }} min={0} />
                     </Form.Item>
                     <Form.Item
                         name="b_cost"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Narxi" style={{ width: '100%' }} min={0} />
                     </Form.Item>
-                </Input.Group>
+                </Space>
             </Form.Item>
 
             <Form.Item label="C toifali joylar">
-                <Input.Group compact>
+                <Space style={{ width: '100%' }}>
                     <Form.Item
                         name="c_total_spots"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)', marginRight: '8px' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Umumiy" style={{ width: '100%' }} min={0} />
                     </Form.Item>
                     <Form.Item
                         name="c_available_spots"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)', marginRight: '8px' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Bo'sh" style={{ width: '100%' }} min={0} />
                     </Form.Item>
                     <Form.Item
                         name="c_cost"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Narxi" style={{ width: '100%' }} min={0} />
                     </Form.Item>
-                </Input.Group>
+                </Space>
             </Form.Item>
 
             <Form.Item label="Elektromobil joylari">
-                <Input.Group compact>
+                <Space style={{ width: '100%' }}>
                     <Form.Item
                         name="ev_total_spots"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)', marginRight: '8px' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Umumiy" style={{ width: '100%' }} min={0} />
                     </Form.Item>
                     <Form.Item
                         name="ev_available_spots"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)', marginRight: '8px' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Bo'sh" style={{ width: '100%' }} min={0} />
                     </Form.Item>
                     <Form.Item
                         name="ev_charging_cost"
                         rules={[{ required: true }]}
-                        style={{ display: 'inline-block', width: 'calc(33% - 8px)' }}
+                        style={{ marginBottom: 0, width: '33%' }}
                     >
                         <InputNumber placeholder="Zaryadlash narxi" style={{ width: '100%' }} min={0} />
                     </Form.Item>
-                </Input.Group>
+                </Space>
             </Form.Item>
 
             <Form.Item 

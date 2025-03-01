@@ -207,6 +207,7 @@ const ParkingSpots: React.FC = () => {
                 <SpotDetails 
                     parkingId={selectedSpotId} 
                     onClose={() => setDetailsVisible(false)} 
+                    onUpdate={() => fetchParkingSpots()}
                 />
             </Drawer>
         </div>

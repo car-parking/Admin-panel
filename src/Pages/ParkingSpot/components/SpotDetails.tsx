@@ -115,11 +115,16 @@ const SpotDetails: React.FC<SpotDetailsProps> = ({ parkingId, onClose, onUpdate 
 
     return (
         <div>
-            <Card title={spot.location_name}>
-                <p><strong>Manzil:</strong> {spot.address}</p>
-                <p><strong>Koordinatalar:</strong> {spot.longitude}, {spot.latitude}</p>
-                <p><strong>Narx:</strong> {spot.cost?.toLocaleString()} so'm</p>
-                <p><strong>Reyting:</strong> <Rate disabled defaultValue={spot.rating} /></p>
+                  <Card title={spot.location_name}>
+                <div><strong>Manzil:</strong> {spot.address}</div>
+                <div><strong>Koordinatalar:</strong> {spot.longitude}, {spot.latitude}</div>
+                <div><strong>Narx:</strong> {spot.cost?.toLocaleString()} so'm</div>
+                <div>
+                    <strong>Reyting:</strong>{' '}
+                    <span style={{ display: 'inline-block' }}>
+                        <Rate disabled defaultValue={spot.rating} />
+                    </span>
+                </div>
                 
                 <div style={{ marginBottom: 16 }}>
                     <h4>Bo'sh joylarni yangilash</h4>
@@ -156,12 +161,12 @@ const SpotDetails: React.FC<SpotDetailsProps> = ({ parkingId, onClose, onUpdate 
                     {spot.images && spot.images.length > 0 && (
                         <div style={{ marginTop: 16 }}>
                             <Carousel autoplay>
-                                {spot?.images?.map((img) => (
-                                    <div key={img?.id}>
+                                {spot.images.map((img) => (
+                                    <div key={img.id}>
                                         <div style={{ position: 'relative', width: '100%', height: '300px' }}>
                                             <Image
                                                 src={`https://backend-production-149c.up.railway.app${img.image}`}
-                                                alt="Parkinwg"
+                                                alt="Parking"
                                                 style={{ width: '100%', height: '300px', objectFit: 'cover' }}
                                             />
                                             <Button 
@@ -190,19 +195,21 @@ const SpotDetails: React.FC<SpotDetailsProps> = ({ parkingId, onClose, onUpdate 
                             <List.Item>
                                 <List.Item.Meta
                                     title={
-                                        <Rate 
-                                            disabled 
-                                            defaultValue={comment.raiting} 
-                                            style={{ fontSize: 16 }}
-                                        />
+                                        <div>
+                                            <Rate 
+                                                disabled 
+                                                defaultValue={comment.raiting} 
+                                                style={{ fontSize: 16 }}
+                                            />
+                                        </div>
                                     }
                                     description={
-                                        <>
-                                            <p>{comment.comment}</p>
+                                        <div>
+                                            <div>{comment.comment}</div>
                                             <small>
                                                 {new Date(parseInt(comment.created_at)).toLocaleDateString()}
                                             </small>
-                                        </>
+                                        </div>
                                     }
                                 />
                             </List.Item>

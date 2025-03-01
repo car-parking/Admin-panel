@@ -10,6 +10,8 @@ import Owner from "./Pages/Owner";
 import Admins from "./Pages/Admins";
 import Settings from "./Pages/Setting";
 import ParkingSpots from "./Pages/ParkingSpot";
+import Payments from "./Pages/Payments";
+import Reservations from "./Pages/Reservations";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +57,8 @@ const App: React.FC = () => {
               <Route path="admins" element={<Admins />} />
               <Route path="settings" element={<Settings />} />
               <Route path="parking-spots" element={<ParkingSpots />} />
+              <Route path="payments" element={<Payments />} />
+              <Route path="reservations" element={<Reservations />} />
             </Route>
           </Routes>
         </Router>

@@ -8,6 +8,8 @@ import {
   MenuOutlined,
   UserAddOutlined,
   CarOutlined,
+  WalletOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore";
@@ -37,6 +39,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ darkMode, setDarkMode }) => {
       key: "parking-spots",
       icon: <CarOutlined />, 
       label: "Parking Joylar" 
+    },
+    { 
+      key: "payments",
+      icon: <WalletOutlined />, 
+      label: "To'lovlar" 
+    },
+    { 
+      key: "reservations",
+      icon: <ScheduleOutlined />, 
+      label: "Rezervatsiyalar" 
     },
     { key: "settings", icon: <SettingOutlined />, label: "Sozlamalar" },
     {
