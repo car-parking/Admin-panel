@@ -3,7 +3,6 @@ import { Table, Typography, Button, Drawer, Input, Space, Popconfirm } from "ant
 import { useAxios } from "../../hook/useAxsios";
 import { AddComponents, EditComponents, VisiblityComponent } from "./components";
 import SpotDetails from './components/SpotDetails';
-import NearbySpots from './components/NearbySpots';
 
 const { Title } = Typography;
 const { Search } = Input;

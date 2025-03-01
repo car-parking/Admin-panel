@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
-import Cookies from "js-cookie";
 
 interface RequestOptions {
   url: string;

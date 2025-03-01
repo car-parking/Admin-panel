@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Table, Typography, Button, Drawer, Input, Space, Popconfirm, } from "antd";
+import { Table, Button, Drawer, Input, Space, Popconfirm } from "antd";
 import { useAxios } from "../../hook/useAxsios";
 import { AddComponents, EditCommponents } from "./components";
 import { PlusOutlined } from '@ant-design/icons';
 import VisibilityComponent from "../../components/VisibilityComponent";
 import TableVisibilityComponent from "../../components/TableVisibilityComponent";
 
-const { Title } = Typography;
 const { Search } = Input;
 
 type User = {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, Row, Col, Statistic, Table, Typography } from 'antd';
+import { Card, Row, Col, Statistic, Typography } from 'antd';
 import { useAxios } from '../../hook/useAxsios';
 import { UserOutlined, CarOutlined, DollarOutlined, ScheduleOutlined } from '@ant-design/icons';
 

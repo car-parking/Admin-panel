@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, theme } from "antd";
@@ -13,13 +13,14 @@ import ParkingSpots from "./Pages/ParkingSpot";
 import Payments from "./Pages/Payments";
 import Reservations from "./Pages/Reservations";
 
+interface AppProps {
+  darkMode: boolean;
+  setDarkMode: Dispatch<SetStateAction<boolean>>;
+}
+
 const queryClient = new QueryClient();
 
-const App: React.FC = () => {
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem("darkMode") === "true"; // LocalStorage'dan darkMode holatini yuklash
-  });
-
+const App: React.FC<AppProps> = ({ darkMode, setDarkMode }) => {
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode)); // DarkMode holatini saqlash
   }, [darkMode]);
