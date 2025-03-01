@@ -12,6 +12,7 @@ import Settings from "./Pages/Setting";
 import ParkingSpots from "./Pages/ParkingSpot";
 import Payments from "./Pages/Payments";
 import Reservations from "./Pages/Reservations";
+import PrivateRoute from "./PrivateRoutes/PrivateRoute";
 
 interface AppProps {
   darkMode: boolean;
@@ -51,6 +52,7 @@ const App: React.FC<AppProps> = ({ darkMode, setDarkMode }) => {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+       <Route element={<PrivateRoute />}>
             <Route path="/" element={<AdminLayout darkMode={darkMode} setDarkMode={setDarkMode} />}>
               <Route index path="/dashboard" element={<Dashboard />} />
               <Route path="users" element={<Users />} />
@@ -61,6 +63,7 @@ const App: React.FC<AppProps> = ({ darkMode, setDarkMode }) => {
               <Route path="payments" element={<Payments />} />
               <Route path="reservations" element={<Reservations />} />
             </Route>
+       </Route>
           </Routes>
         </Router>
       </QueryClientProvider>
